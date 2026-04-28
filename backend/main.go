@@ -1,11 +1,14 @@
 package main
 
 import (
+	"encoding/json"
 	"fmt"
 	"log"
 	"net/http"
 
-	"github.com/gin-gonic/gin"
+	"github.com/go-chi/chi/v5"
+	"github.com/go-chi/chi/v5/middleware"
+	"github.com/go-chi/cors"
 	"github.com/google/uuid"
 	"gorm.io/driver/sqlite"
 	"gorm.io/gorm"
@@ -13,10 +16,10 @@ import (
 
 // Models
 type Board struct {
-	ID          string        `gorm:"primaryKey" json:"id"`
-	Token       string        `gorm:"uniqueIndex" json:"token"`
-	Sport       string        `json:"sport"` // football, hockey, basketball
-	Title       string        `json:"title"`
+	ID           string        `gorm:"primaryKey" json:"id"`
+	Token        string        `gorm:"uniqueIndex" json:"token"`
+	Sport        string        `json:"sport"` // football, hockey, basketball
+	Title        string        `json:"title"`
 	Combinations []Combination `gorm:"foreignKey:BoardID" json:"combinations"`
 }
 
@@ -26,6 +29,28 @@ type Combination struct {
 	Title     string `json:"title"`
 	Content   string `json:"content"` // JSON with player positions and arrows
 	Thumbnail string `json:"thumbnail,omitempty"` // Data URL or S3 key
+}
+
+// Canvas element types
+type Player struct {
+	X, Y       float64 `json:"x,y"`
+	Number     int     `json:"number"`
+	Color      string  `json:"color"` // team color
+	Label      string  `json:"label,omitempty"` // player name
+}
+
+type Arrow struct {
+	Points []struct {
+		X, Y float64 `json:"x,y"`
+	} `json:"points"`
+	Color string `json:"color,omitempty"`
+	Width int    `json:"width,omitempty"`
+	Type  string `json:"type,omitempty"` // "pass", "movement", "shoot"
+}
+
+type CanvasContent struct {
+	Players []Player `json:"players"`
+	Arrows  []Arrow  `json:"arrows"`
 }
 
 var db *gorm.DB
@@ -40,78 +65,158 @@ func main() {
 	db.AutoMigrate(&Board{}, &Combination{})
 
 	// Routes
-	r := gin.Default()
-	r.GET("/health", healthHandler)
+	r := chi.NewRouter()
+	r.Use(middleware.Logger)
+	r.Use(middleware.Recoverer)
 	
-	// Boards
-	r.POST("/api/v1/boards", createBoard)
-	r.GET("/api/v1/boards/:token", getBoard)
-	r.DELETE("/api/v1/boards/:token", deleteBoard)
-	
-	// Combinations
-	r.POST("/api/v1/boards/:token/combos", createCombination)
-	r.GET("/api/v1/boards/:token/combos", listCombinations)
-	r.DELETE("/api/v1/boards/:token/combos/:comboId", deleteCombination)
+	// CORS
+	r.Use(cors.Handler(cors.Options{
+		AllowedOrigins:   []string{"https://example.com", "http://localhost:5173", "http://localhost:3000"},
+		AllowedMethods:   []string{http.MethodGet, http.MethodPost, http.MethodDelete, http.MethodPut, http.MethodPatch},
+		AllowedHeaders:   []string{"Accept", "Authorization", "Content-Type", "X-CSRF-Token"},
+		ExposedHeaders:   []string{"Link"},
+		AllowCredentials: true,
+		MaxAge:           300,
+	}))
+
+	r.Route("/api/v1", func(r chi.Router) {
+		// Health
+		r.Get("/health", healthHandler)
+
+		// Boards
+		r.Post("/boards", createBoard)
+		r.Get("/boards", listBoards)
+		r.Get("/boards/{token}", getBoard)
+		r.Delete("/boards/{token}", deleteBoard)
+
+		// Combinations
+		r.Post("/boards/{token}/combos", createCombination)
+		r.Get("/boards/{token}/combos", listCombinations)
+		r.Delete("/boards/{token}/combos/{comboId}", deleteCombination)
+		r.Put("/boards/{token}/combos/{comboId}", updateCombination)
+
+		// Canvas rendering (export to image)
+		r.Post("/render/canvas", renderCanvas)
+	})
 
 	log.Println("Server running on :8080")
-	r.Run(":8080")
+	log.Fatal(http.ListenAndServe(":8080", r))
 }
 
-func healthHandler(c *gin.Context) {
-	c.JSON(http.StatusOK, gin.H{"status": "ok"})
+func healthHandler(w http.ResponseWriter, r *http.Request) {
+	w.Write([]byte(`{"status":"ok"}`))
 }
 
-func createBoard(c *gin.Context) {
+func createBoard(w http.ResponseWriter, r *http.Request) {
+	var input struct {
+		Sport string `json:"sport"`
+		Title string `json:"title"`
+	}
+	if err := json.NewDecoder(r.Body).Decode(&input); err != nil {
+		http.Error(w, `{"error":"invalid json"}`, http.StatusBadRequest)
+		return
+	}
+
 	board := Board{
 		ID:    uuid.New().String(),
 		Token: uuid.New().String(),
+		Sport: input.Sport,
+		Title: input.Title,
 	}
 	db.Create(&board)
-	c.JSON(http.StatusCreated, board)
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(http.StatusCreated)
+	json.NewEncoder(w).Encode(board)
 }
 
-func getBoard(c *gin.Context) {
-	token := c.Param("token")
+func listBoards(w http.ResponseWriter, r *http.Request) {
+	var boards []Board
+	db.Find(&boards)
+	w.Header().Set("Content-Type", "application/json")
+	json.NewEncoder(w).Encode(boards)
+}
+
+func getBoard(w http.ResponseWriter, r *http.Request) {
+	token := chi.URLParam(r, "token")
 	var board Board
 	if err := db.Preload("Combinations").First(&board, "token = ?", token).Error; err != nil {
-		c.JSON(http.StatusNotFound, gin.H{"error": "Board not found"})
+		w.WriteHeader(http.StatusNotFound)
+		json.NewEncoder(w).Encode(map[string]string{"error": "Board not found"})
 		return
 	}
-	c.JSON(http.StatusOK, board)
+	w.Header().Set("Content-Type", "application/json")
+	json.NewEncoder(w).Encode(board)
 }
 
-func deleteBoard(c *gin.Context) {
-	token := c.Param("token")
+func deleteBoard(w http.ResponseWriter, r *http.Request) {
+	token := chi.URLParam(r, "token")
 	db.Delete(&Board{}, "token = ?", token)
-	c.JSON(http.StatusOK, gin.H{"message": "deleted"})
+	w.Header().Set("Content-Type", "application/json")
+	json.NewEncoder(w).Encode(map[string]string{"message": "deleted"})
 }
 
-func createCombination(c *gin.Context) {
-	token := c.Param("token")
+func createCombination(w http.ResponseWriter, r *http.Request) {
+	token := chi.URLParam(r, "token")
 	var combo Combination
-	if err := c.ShouldBindJSON(&combo); err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+	if err := json.NewDecoder(r.Body).Decode(&combo); err != nil {
+		http.Error(w, `{"error":"invalid json"}`, http.StatusBadRequest)
 		return
 	}
 	combo.ID = uuid.New().String()
 	combo.BoardID = token
 	db.Create(&combo)
-	c.JSON(http.StatusCreated, combo)
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(http.StatusCreated)
+	json.NewEncoder(w).Encode(combo)
 }
 
-func listCombinations(c *gin.Context) {
-	token := c.Param("token")
+func listCombinations(w http.ResponseWriter, r *http.Request) {
+	token := chi.URLParam(r, "token")
 	var combos []Combination
 	db.Where("board_id = ?", token).Find(&combos)
-	c.JSON(http.StatusOK, combos)
+	w.Header().Set("Content-Type", "application/json")
+	json.NewEncoder(w).Encode(combos)
 }
 
-func deleteCombination(c *gin.Context) {
-	comboId := c.Param("comboId")
+func deleteCombination(w http.ResponseWriter, r *http.Request) {
+	comboId := chi.URLParam(r, "comboId")
 	db.Delete(&Combination{}, "id = ?", comboId)
-	c.JSON(http.StatusOK, gin.H{"message": "deleted"})
+	w.Header().Set("Content-Type", "application/json")
+	json.NewEncoder(w).Encode(map[string]string{"message": "deleted"})
+}
+
+func updateCombination(w http.ResponseWriter, r *http.Request) {
+	comboId := chi.URLParam(r, "comboId")
+	var combo Combination
+	if err := json.NewDecoder(r.Body).Decode(&combo); err != nil {
+		http.Error(w, `{"error":"invalid json"}`, http.StatusBadRequest)
+		return
+	}
+	combo.ID = comboId
+	db.Save(&combo)
+	w.Header().Set("Content-Type", "application/json")
+	json.NewEncoder(w).Encode(combo)
+}
+
+// renderCanvas renders a tactical diagram from canvas data and returns a PNG image
+func renderCanvas(w http.ResponseWriter, r *http.Request) {
+	var content CanvasContent
+	if err := json.NewDecoder(r.Body).Decode(&content); err != nil {
+		http.Error(w, `{"error":"invalid json"}`, http.StatusBadRequest)
+		return
+	}
+
+	// For now, return a placeholder response
+	// TODO: Implement proper canvas rendering with freetype or similar
+	w.Header().Set("Content-Type", "application/json")
+	json.NewEncoder(w).Encode(map[string]string{
+		"status": "ok",
+		"message": "Canvas rendering endpoint (placeholder)",
+		"playerCount": fmt.Sprintf("%d", len(content.Players)),
+		"arrowCount":  fmt.Sprintf("%d", len(content.Arrows)),
+	})
 }
 
 func init() {
-	fmt.Println("Board backend initialized")
+	fmt.Println("Board backend initialized with Chi")
 }

@@ -9,18 +9,18 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "konva": "^9.2.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
-    "react-router-dom": "^6.20.1",
-    "konva": "^9.2.0",
     "react-konva": "^18.2.0",
+    "react-router-dom": "^6.20.1",
     "zustand": "^4.4.7"
   },
   "devDependencies": {
-    "@types/react": "^18.2.37",
-    "@types/react-dom": "^18.2.15",
+    "@types/react": "^18.3.28",
+    "@types/react-dom": "^18.3.7",
     "@vitejs/plugin-react": "^4.2.0",
-    "typescript": "^5.2.2",
-    "vite": "^5.0.0"
+    "typescript": "^5.9.3",
+    "vite": "^5.4.21"
   }
 }
