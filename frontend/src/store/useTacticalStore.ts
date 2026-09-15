@@ -26,31 +26,31 @@ export const DEFAULT_PLAYERS: PlayerEntity[] = [
 ];
 
 export const DEFAULT_HALF_COURT_POSITIONS: Record<string, TacticalPoint> = {
-  'home-1': { x: 500, y: 580 }, // PG Top of Key
-  'home-2': { x: 220, y: 440 }, // SG Left Wing
-  'home-3': { x: 780, y: 440 }, // SF Right Wing
-  'home-4': { x: 280, y: 260 }, // PF Left Post
-  'home-5': { x: 720, y: 260 }, // C Right Post
+  'home-1': { x: 350, y: 490 }, // PG Top of Key
+  'home-2': { x: 140, y: 370 }, // SG Left Wing
+  'home-3': { x: 560, y: 370 }, // SF Right Wing
+  'home-4': { x: 190, y: 210 }, // PF Left Post
+  'home-5': { x: 510, y: 210 }, // C Right Post
 
-  'away-1': { x: 500, y: 510 },
-  'away-2': { x: 270, y: 410 },
-  'away-3': { x: 730, y: 410 },
-  'away-4': { x: 330, y: 250 },
-  'away-5': { x: 670, y: 250 },
+  'away-1': { x: 350, y: 430 },
+  'away-2': { x: 180, y: 340 },
+  'away-3': { x: 520, y: 340 },
+  'away-4': { x: 230, y: 200 },
+  'away-5': { x: 470, y: 200 },
 };
 
 export const DEFAULT_FULL_COURT_POSITIONS: Record<string, TacticalPoint> = {
-  'home-1': { x: 450, y: 290 },
-  'home-2': { x: 350, y: 150 },
-  'home-3': { x: 350, y: 430 },
-  'home-4': { x: 200, y: 200 },
-  'home-5': { x: 200, y: 380 },
+  'home-1': { x: 430, y: 270 },
+  'home-2': { x: 330, y: 140 },
+  'home-3': { x: 330, y: 400 },
+  'home-4': { x: 180, y: 190 },
+  'home-5': { x: 180, y: 350 },
 
-  'away-1': { x: 550, y: 290 },
-  'away-2': { x: 650, y: 150 },
-  'away-3': { x: 650, y: 430 },
-  'away-4': { x: 800, y: 200 },
-  'away-5': { x: 800, y: 380 },
+  'away-1': { x: 530, y: 270 },
+  'away-2': { x: 630, y: 140 },
+  'away-3': { x: 630, y: 400 },
+  'away-4': { x: 780, y: 190 },
+  'away-5': { x: 780, y: 350 },
 };
 
 function createInitialStep(variant: BasketballCourtVariant): StepFrame {

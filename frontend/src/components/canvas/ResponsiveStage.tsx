@@ -37,8 +37,8 @@ export const ResponsiveStage: React.FC<ResponsiveStageProps> = ({
     if (!containerRef.current) return;
     const { clientWidth, clientHeight } = containerRef.current;
 
-    // Leave a small padding for mobile bezels
-    const pad = 12;
+    // Leave minimal padding for mobile screens to maximize court size
+    const pad = clientWidth < 600 ? 2 : 10;
     const availW = Math.max(280, clientWidth - pad * 2);
     const availH = Math.max(240, clientHeight - pad * 2);
 

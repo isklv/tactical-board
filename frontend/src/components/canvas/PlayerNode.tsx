@@ -23,7 +23,7 @@ export const PlayerNode: React.FC<PlayerNodeProps> = ({
   onPositionChange,
   onSelect,
 }) => {
-  const radius = 19;
+  const radius = 24; // Scaled up for mobile readability
 
   return (
     <Group>
@@ -34,9 +34,9 @@ export const PlayerNode: React.FC<PlayerNodeProps> = ({
           <Line
             points={[ghostPosition.x, ghostPosition.y, position.x, position.y]}
             stroke={player.color}
-            strokeWidth={2}
+            strokeWidth={2.5}
             dash={[6, 6]}
-            opacity={0.5}
+            opacity={0.55}
           />
           {/* Ghost token */}
           <Circle
@@ -44,20 +44,20 @@ export const PlayerNode: React.FC<PlayerNodeProps> = ({
             y={ghostPosition.y}
             radius={radius - 2}
             fill={player.color}
-            opacity={0.3}
+            opacity={0.35}
             stroke="#ffffff"
             strokeWidth={1.5}
           />
           <Text
             x={ghostPosition.x - radius}
-            y={ghostPosition.y - 7}
+            y={ghostPosition.y - 9}
             width={radius * 2}
             align="center"
             text={player.number.toString()}
-            fontSize={12}
+            fontSize={14}
             fontStyle="bold"
             fill="#ffffff"
-            opacity={0.4}
+            opacity={0.5}
           />
         </Group>
       )}
@@ -78,28 +78,28 @@ export const PlayerNode: React.FC<PlayerNodeProps> = ({
         onClick={onSelect}
         onTap={onSelect}
       >
-        {/* Expanded Invisible Touch Area for Mobile (Min 48px touch target) */}
-        <Circle radius={28} fill="transparent" />
+        {/* Expanded Invisible Touch Area for Mobile (Min 70px touch target) */}
+        <Circle radius={36} fill="transparent" />
 
         {/* Selection Ring */}
         {isSelected && (
           <Circle
-            radius={radius + 6}
+            radius={radius + 7}
             stroke="#f59e0b"
-            strokeWidth={3}
-            dash={[6, 3]}
+            strokeWidth={3.5}
+            dash={[6, 4]}
           />
         )}
 
         {/* Ball Possession Halo Ring */}
         {hasBall && (
           <Circle
-            radius={radius + 4}
+            radius={radius + 5}
             stroke="#f97316"
-            strokeWidth={3}
+            strokeWidth={3.5}
             shadowColor="#ea580c"
-            shadowBlur={8}
-            shadowOpacity={0.8}
+            shadowBlur={10}
+            shadowOpacity={0.9}
           />
         )}
 
@@ -108,21 +108,21 @@ export const PlayerNode: React.FC<PlayerNodeProps> = ({
           radius={radius}
           fill={player.color}
           stroke="#ffffff"
-          strokeWidth={2.5}
+          strokeWidth={3}
           shadowColor="#000000"
-          shadowBlur={6}
+          shadowBlur={8}
           shadowOffset={{ x: 0, y: 3 }}
-          shadowOpacity={0.4}
+          shadowOpacity={0.45}
         />
 
         {/* Jersey Number */}
         <Text
           x={-radius}
-          y={-8}
+          y={-10}
           width={radius * 2}
           align="center"
           text={player.number.toString()}
-          fontSize={15}
+          fontSize={18}
           fontStyle="bold"
           fill={player.textColor || '#ffffff'}
           listening={false}
@@ -131,18 +131,18 @@ export const PlayerNode: React.FC<PlayerNodeProps> = ({
         {/* Player Name / Position Label below token */}
         {player.name && (
           <Text
-            x={-30}
-            y={radius + 3}
-            width={60}
+            x={-35}
+            y={radius + 4}
+            width={70}
             align="center"
             text={player.name}
-            fontSize={11}
+            fontSize={12}
             fontStyle="bold"
             fill="#cbd5e1"
             listening={false}
             shadowColor="#000000"
-            shadowBlur={4}
-            shadowOpacity={0.8}
+            shadowBlur={5}
+            shadowOpacity={0.9}
           />
         )}
       </Group>

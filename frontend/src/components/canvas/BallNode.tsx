@@ -21,7 +21,7 @@ export const BallNode: React.FC<BallNodeProps> = ({
   isDraggable = true,
   onPositionChange,
 }) => {
-  const radius = 11;
+  const radius = 15; // Scaled up for mobile visibility
 
   // Find nearest player when ball is dropped to see if it should snap
   const handleDragEnd = (e: any) => {
@@ -29,7 +29,7 @@ export const BallNode: React.FC<BallNodeProps> = ({
     const dropY = Math.round(e.target.y());
 
     let nearestPlayerId: string | null = null;
-    let minDistance = 45; // snap threshold in virtual units
+    let minDistance = 55; // snap threshold in virtual units
 
     for (const player of players) {
       const pPos = playerPositions[player.id];
@@ -43,7 +43,7 @@ export const BallNode: React.FC<BallNodeProps> = ({
 
     if (nearestPlayerId) {
       const pPos = playerPositions[nearestPlayerId];
-      onPositionChange({ x: pPos.x + 18, y: pPos.y + 18 }, nearestPlayerId);
+      onPositionChange({ x: pPos.x + 22, y: pPos.y + 22 }, nearestPlayerId);
     } else {
       onPositionChange({ x: dropX, y: dropY }, null);
     }
@@ -57,16 +57,16 @@ export const BallNode: React.FC<BallNodeProps> = ({
           <Line
             points={[ghostPosition.x, ghostPosition.y, position.x, position.y]}
             stroke="#f97316"
-            strokeWidth={2}
+            strokeWidth={2.5}
             dash={[4, 4]}
-            opacity={0.5}
+            opacity={0.6}
           />
           <Circle
             x={ghostPosition.x}
             y={ghostPosition.y}
             radius={radius - 2}
             fill="#ea580c"
-            opacity={0.35}
+            opacity={0.4}
           />
         </Group>
       )}
@@ -84,32 +84,32 @@ export const BallNode: React.FC<BallNodeProps> = ({
         }}
         onDragEnd={handleDragEnd}
       >
-        {/* Mobile touch expander (min 44px hit target) */}
-        <Circle radius={24} fill="transparent" />
+        {/* Mobile touch expander (min 64px hit target) */}
+        <Circle radius={32} fill="transparent" />
 
         {/* Outer ball circle */}
         <Circle
           radius={radius}
           fill="#f97316"
-          stroke="#9a3412"
-          strokeWidth={1.5}
+          stroke="#7c2d12"
+          strokeWidth={2}
           shadowColor="#000000"
-          shadowBlur={5}
+          shadowBlur={6}
           shadowOffset={{ x: 0, y: 2 }}
-          shadowOpacity={0.5}
+          shadowOpacity={0.6}
         />
 
         {/* Basketball seams */}
         <Line
           points={[-radius + 2, 0, radius - 2, 0]}
           stroke="#431407"
-          strokeWidth={1.5}
+          strokeWidth={2}
           listening={false}
         />
         <Line
           points={[0, -radius + 2, 0, radius - 2]}
           stroke="#431407"
-          strokeWidth={1.5}
+          strokeWidth={2}
           listening={false}
         />
       </Group>

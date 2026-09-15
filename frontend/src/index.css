@@ -62,9 +62,9 @@ html, body, #root {
 .header-left {
   display: flex;
   align-items: center;
-  gap: 12px;
+  gap: 10px;
   flex: 1;
-  max-width: 480px;
+  max-width: 440px;
 }
 
 .title-input {
@@ -76,7 +76,7 @@ html, body, #root {
   font-size: 0.95rem;
   font-weight: 600;
   width: 100%;
-  min-width: 140px;
+  min-width: 130px;
   outline: none;
   transition: border-color 0.2s;
 }
@@ -91,13 +91,14 @@ html, body, #root {
   padding: 3px;
   border-radius: 8px;
   border: 1px solid var(--border-color);
+  flex-shrink: 0;
 }
 
 .court-toggle-btn {
   display: flex;
   align-items: center;
   gap: 6px;
-  padding: 4px 10px;
+  padding: 5px 10px;
   border: none;
   border-radius: 6px;
   background: transparent;
@@ -157,6 +158,7 @@ html, body, #root {
   display: flex;
   align-items: center;
   gap: 8px;
+  flex-shrink: 0;
 }
 
 .action-icon-btn {
@@ -183,19 +185,24 @@ html, body, #root {
   display: flex;
   align-items: center;
   gap: 6px;
-  padding: 7px 14px;
+  padding: 8px 14px;
   background: var(--accent-primary);
   border: none;
   border-radius: 8px;
   color: #fff;
-  font-size: 0.85rem;
-  font-weight: 600;
+  font-size: 0.88rem;
+  font-weight: 700;
   cursor: pointer;
-  transition: background 0.2s;
+  box-shadow: 0 2px 8px rgba(249, 115, 22, 0.35);
+  transition: background 0.2s, transform 0.1s;
 }
 
 .share-btn:hover {
   background: var(--accent-hover);
+}
+
+.share-btn:active {
+  transform: scale(0.97);
 }
 
 /* Main Canvas Wrapper */
@@ -238,8 +245,8 @@ html, body, #root {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 8px max(16px, var(--sar)) 8px max(16px, var(--sal));
-  gap: 16px;
+  padding: 8px max(14px, var(--sar)) 8px max(14px, var(--sal));
+  gap: 12px;
   height: 64px;
 }
 
@@ -260,6 +267,7 @@ html, body, #root {
   scrollbar-width: none;
   -ms-overflow-style: none;
   padding: 2px;
+  -webkit-overflow-scrolling: touch;
 }
 
 .steps-scroll::-webkit-scrollbar {
@@ -270,23 +278,24 @@ html, body, #root {
   display: flex;
   align-items: center;
   gap: 6px;
-  padding: 6px 12px;
+  padding: 7px 12px;
   background: #1f2937;
   border: 1px solid var(--border-color);
   border-radius: 20px;
   color: var(--text-muted);
-  font-size: 0.8rem;
+  font-size: 0.82rem;
   font-weight: 600;
   cursor: pointer;
   white-space: nowrap;
   transition: all 0.2s;
+  min-height: 36px;
 }
 
 .step-pill.active {
-  background: #3b82f6;
-  border-color: #60a5fa;
+  background: #2563eb;
+  border-color: #3b82f6;
   color: #fff;
-  box-shadow: 0 2px 8px rgba(59, 130, 246, 0.4);
+  box-shadow: 0 2px 8px rgba(37, 99, 235, 0.4);
 }
 
 .step-num {
@@ -304,6 +313,7 @@ html, body, #root {
   display: flex;
   align-items: center;
   gap: 4px;
+  flex-shrink: 0;
 }
 
 .step-action-btn {
@@ -311,14 +321,15 @@ html, body, #root {
   align-items: center;
   justify-content: center;
   gap: 4px;
-  padding: 6px 10px;
+  padding: 7px 11px;
   background: #1f2937;
   border: 1px solid var(--border-color);
   border-radius: 8px;
   color: var(--text-muted);
   cursor: pointer;
-  font-size: 0.8rem;
+  font-size: 0.82rem;
   font-weight: 600;
+  min-height: 36px;
   transition: all 0.2s;
 }
 
@@ -343,7 +354,7 @@ html, body, #root {
 .playback-controls {
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 6px;
   flex-shrink: 0;
 }
 
@@ -351,8 +362,8 @@ html, body, #root {
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 38px;
-  height: 38px;
+  width: 40px;
+  height: 40px;
   background: #1f2937;
   border: 1px solid var(--border-color);
   border-radius: 50%;
@@ -367,16 +378,16 @@ html, body, #root {
 }
 
 .playback-btn:disabled {
-  opacity: 0.4;
+  opacity: 0.35;
   cursor: not-allowed;
 }
 
 .playback-btn.play-main {
-  width: 46px;
-  height: 46px;
+  width: 48px;
+  height: 48px;
   background: #22c55e;
   border: none;
-  box-shadow: 0 4px 12px rgba(34, 197, 94, 0.4);
+  box-shadow: 0 4px 14px rgba(34, 197, 94, 0.45);
 }
 
 .playback-btn.play-main:hover {
@@ -388,13 +399,14 @@ html, body, #root {
   display: flex;
   align-items: center;
   gap: 6px;
-  padding: 6px 10px;
+  padding: 7px 10px;
   background: #1f2937;
   border: 1px solid var(--border-color);
   border-radius: 8px;
   color: var(--text-muted);
   font-size: 0.8rem;
   font-weight: 600;
+  min-height: 38px;
   cursor: pointer;
   transition: all 0.2s;
 }
@@ -406,13 +418,14 @@ html, body, #root {
 }
 
 .speed-btn {
-  padding: 6px 10px;
+  padding: 7px 10px;
   background: #1f2937;
   border: 1px solid var(--border-color);
   border-radius: 8px;
   color: var(--text-main);
-  font-size: 0.82rem;
+  font-size: 0.84rem;
   font-weight: 700;
+  min-height: 38px;
   cursor: pointer;
 }
 
@@ -420,8 +433,8 @@ html, body, #root {
 .modal-overlay {
   position: fixed;
   inset: 0;
-  background: rgba(0, 0, 0, 0.75);
-  backdrop-filter: blur(6px);
+  background: rgba(0, 0, 0, 0.8);
+  backdrop-filter: blur(8px);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -434,16 +447,19 @@ html, body, #root {
   border: 1px solid var(--border-color);
   border-radius: 16px;
   width: 100%;
-  max-width: 520px;
+  max-width: 540px;
+  max-height: 90dvh;
+  display: flex;
+  flex-direction: column;
   overflow: hidden;
-  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.5);
+  box-shadow: 0 25px 35px -5px rgba(0, 0, 0, 0.6);
   animation: modalPop 0.2s ease-out;
 }
 
 @keyframes modalPop {
   from {
     opacity: 0;
-    transform: scale(0.95);
+    transform: scale(0.96);
   }
   to {
     opacity: 1;
@@ -457,11 +473,19 @@ html, body, #root {
   justify-content: space-between;
   padding: 16px 20px;
   border-bottom: 1px solid var(--border-color);
+  flex-shrink: 0;
 }
 
-.modal-header h3 {
-  font-size: 1.1rem;
+.modal-header-title h3 {
+  font-size: 1.15rem;
   font-weight: 700;
+  color: #fff;
+}
+
+.modal-subtitle {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  margin-top: 2px;
 }
 
 .modal-close-btn {
@@ -469,17 +493,22 @@ html, body, #root {
   border: none;
   color: var(--text-muted);
   cursor: pointer;
+  padding: 4px;
+  border-radius: 6px;
 }
 
 .modal-close-btn:hover {
   color: #fff;
+  background: rgba(255, 255, 255, 0.1);
 }
 
 .modal-body {
-  padding: 20px;
+  padding: 18px 20px;
   display: flex;
   flex-direction: column;
   gap: 14px;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
 }
 
 .export-card {
@@ -488,36 +517,43 @@ html, body, #root {
   border-radius: 12px;
   padding: 14px 16px;
   display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 16px;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.export-card.primary-card {
+  border-color: rgba(249, 115, 22, 0.4);
+  background: linear-gradient(180deg, rgba(249, 115, 22, 0.08) 0%, #1f2937 100%);
 }
 
 .export-card-info h4 {
-  font-size: 0.95rem;
-  font-weight: 600;
+  font-size: 0.98rem;
+  font-weight: 700;
   margin-bottom: 4px;
+  color: #fff;
 }
 
 .export-card-info p {
-  font-size: 0.8rem;
+  font-size: 0.84rem;
   color: var(--text-muted);
-  line-height: 1.3;
+  line-height: 1.35;
 }
 
 .btn-modal-action {
   display: flex;
   align-items: center;
-  gap: 6px;
-  padding: 8px 14px;
+  justify-content: center;
+  gap: 8px;
+  padding: 10px 16px;
   background: #374151;
   border: none;
   border-radius: 8px;
   color: #fff;
-  font-size: 0.85rem;
+  font-size: 0.9rem;
   font-weight: 600;
   cursor: pointer;
   white-space: nowrap;
+  min-height: 42px;
   transition: all 0.2s;
 }
 
@@ -527,6 +563,7 @@ html, body, #root {
 
 .btn-modal-action.primary {
   background: var(--accent-primary);
+  box-shadow: 0 2px 8px rgba(249, 115, 22, 0.3);
 }
 
 .btn-modal-action.primary:hover {
@@ -541,18 +578,78 @@ html, body, #root {
 .btn-group-actions {
   display: flex;
   gap: 8px;
+  width: 100%;
+}
+
+.btn-group-actions .btn-modal-action {
+  flex: 1;
 }
 
 .upload-label {
   cursor: pointer;
 }
 
-/* Mobile & Tablet Responsiveness */
-@media (max-width: 840px) {
+/* Video Player & Progress in Modal */
+.recording-progress-container {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.recording-progress-bar {
+  width: 100%;
+  height: 8px;
+  background: #374151;
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.recording-progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #f97316, #22c55e);
+  transition: width 0.1s linear;
+}
+
+.recording-status {
+  font-size: 0.8rem;
+  color: var(--accent-primary);
+  font-weight: 600;
+  text-align: right;
+}
+
+.video-preview-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  width: 100%;
+}
+
+.video-preview-player {
+  width: 100%;
+  max-height: 220px;
+  border-radius: 8px;
+  background: #000;
+  border: 1px solid var(--border-color);
+  outline: none;
+}
+
+.video-preview-actions {
+  display: flex;
+  gap: 8px;
+  width: 100%;
+}
+
+.video-preview-actions .download-btn {
+  flex: 1;
+}
+
+/* Mobile & Tablet Optimizations */
+@media (max-width: 768px) {
   .tactical-header {
     height: auto;
     flex-wrap: wrap;
-    padding: 8px 12px;
+    padding: 8px 10px;
     gap: 8px;
   }
 
@@ -560,13 +657,27 @@ html, body, #root {
     max-width: 100%;
     width: 100%;
     order: 1;
+    display: flex;
+    justify-content: space-between;
+  }
+
+  .title-input {
+    font-size: 0.88rem;
+    padding: 5px 8px;
   }
 
   .tools-bar {
     order: 2;
     overflow-x: auto;
     width: 100%;
-    justify-content: space-between;
+    justify-content: space-around;
+    padding: 4px 2px;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .tool-btn {
+    padding: 8px 10px;
+    min-height: 38px;
   }
 
   .tool-label {
@@ -576,7 +687,7 @@ html, body, #root {
   .header-right {
     order: 3;
     width: 100%;
-    justify-content: flex-end;
+    justify-content: space-between;
   }
 
   .btn-text {
@@ -584,7 +695,7 @@ html, body, #root {
   }
 
   .canvas-wrapper {
-    height: calc(100% - 130px - 70px);
+    height: calc(100% - 128px - 66px);
   }
 
   .toggle-label {
@@ -593,5 +704,35 @@ html, body, #root {
 
   .step-action-text {
     display: none;
+  }
+
+  /* Modal Bottom Sheet on Mobile */
+  .modal-overlay {
+    padding: 0;
+    align-items: flex-end;
+  }
+
+  .modal-content {
+    max-width: 100%;
+    border-bottom-left-radius: 0;
+    border-bottom-right-radius: 0;
+    border-top-left-radius: 20px;
+    border-top-right-radius: 20px;
+    max-height: 86dvh;
+  }
+
+  .modal-body {
+    padding: 16px;
+    padding-bottom: max(24px, var(--sab));
+  }
+
+  .btn-modal-action {
+    width: 100%;
+    min-height: 46px;
+    font-size: 0.95rem;
+  }
+
+  .btn-group-actions {
+    flex-direction: column;
   }
 }

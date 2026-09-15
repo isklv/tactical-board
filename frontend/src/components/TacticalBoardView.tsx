@@ -73,7 +73,7 @@ export const TacticalBoardView: React.FC = () => {
       type: activeTool as any,
       points: [virtualPos.x, virtualPos.y],
       color: toolColorMap[activeTool] || '#ffffff',
-      width: activeTool === 'screen' ? 4 : 3,
+      width: activeTool === 'screen' ? 5.5 : 4.5,
       stepIndex: currentStepIndex,
     };
 

@@ -9,7 +9,7 @@ interface TacticalArrowsProps {
 }
 
 // Helper to compute arrowhead points at the end of a line
-function computeArrowhead(x1: number, y1: number, x2: number, y2: number, headLength = 16) {
+function computeArrowhead(x1: number, y1: number, x2: number, y2: number, headLength = 22) {
   const angle = Math.atan2(y2 - y1, x2 - x1);
   const leftX = x2 - headLength * Math.cos(angle - Math.PI / 6);
   const leftY = y2 - headLength * Math.sin(angle - Math.PI / 6);
@@ -20,7 +20,7 @@ function computeArrowhead(x1: number, y1: number, x2: number, y2: number, headLe
 }
 
 // Helper to compute screen T-bar perpendicular line at the end
-function computeScreenTBar(x1: number, y1: number, x2: number, y2: number, barHalfLength = 16) {
+function computeScreenTBar(x1: number, y1: number, x2: number, y2: number, barHalfLength = 22) {
   const angle = Math.atan2(y2 - y1, x2 - x1);
   const perpAngle = angle + Math.PI / 2;
 
@@ -33,7 +33,7 @@ function computeScreenTBar(x1: number, y1: number, x2: number, y2: number, barHa
 }
 
 // Helper to create zigzag points for dribble
-function computeZigzag(x1: number, y1: number, x2: number, y2: number, amplitude = 10) {
+function computeZigzag(x1: number, y1: number, x2: number, y2: number, amplitude = 13) {
   const dx = x2 - x1;
   const dy = y2 - y1;
   const dist = Math.hypot(dx, dy);

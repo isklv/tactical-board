@@ -2,8 +2,8 @@ import React from 'react';
 import { Group, Rect, Line, Circle, Arc, Path } from 'react-konva';
 import { BasketballCourtVariant } from '../../types/tactical';
 
-export const HALF_COURT_BOUNDS = { width: 1000, height: 800 };
-export const FULL_COURT_BOUNDS = { width: 1000, height: 580 };
+export const HALF_COURT_BOUNDS = { width: 700, height: 680 };
+export const FULL_COURT_BOUNDS = { width: 960, height: 540 };
 
 interface BasketballCourtProps {
   variant: BasketballCourtVariant;
@@ -15,21 +15,21 @@ export const BasketballCourt: React.FC<BasketballCourtProps> = ({ variant }) => 
   if (isHalfCourt) {
     const W = HALF_COURT_BOUNDS.width;
     const H = HALF_COURT_BOUNDS.height;
-    const margin = 40;
-    const courtW = W - margin * 2; // 920
-    const courtH = H - margin * 2; // 720
-    const courtLeft = margin;
-    const courtTop = margin;
-    const rimX = W / 2;
-    const rimY = courtTop + 75; // 115
-    const keyW = 320;
-    const keyH = 380;
-    const keyLeft = rimX - keyW / 2; // 340
-    const keyTop = courtTop; // 40
-    const ftY = keyTop + keyH; // 420
-    const ftRadius = 115;
-    const threePtRadius = 450;
-    const cornerXDist = 385; // Distance from rim to corner 3-pt line
+    const margin = 20;
+    const courtW = W - margin * 2; // 660
+    const courtH = H - margin * 2; // 640
+    const courtLeft = margin; // 20
+    const courtTop = margin; // 20
+    const rimX = W / 2; // 350
+    const rimY = courtTop + 70; // 90
+    const keyW = 240;
+    const keyH = 290;
+    const keyLeft = rimX - keyW / 2; // 230
+    const keyTop = courtTop; // 20
+    const ftY = keyTop + keyH; // 310
+    const ftRadius = 88;
+    const threePtRadius = 340;
+    const cornerXDist = 290; // Distance from rim to corner 3-pt line
     const yIntersect = rimY + Math.sqrt(threePtRadius * threePtRadius - cornerXDist * cornerXDist);
     const halfCourt3PtPath = `M ${rimX - cornerXDist} ${courtTop} L ${rimX - cornerXDist} ${yIntersect} A ${threePtRadius} ${threePtRadius} 0 0 0 ${rimX + cornerXDist} ${yIntersect} L ${rimX + cornerXDist} ${courtTop}`;
 
@@ -42,7 +42,7 @@ export const BasketballCourt: React.FC<BasketballCourtProps> = ({ variant }) => 
           width={W}
           height={H}
           fill="#1e222d"
-          cornerRadius={16}
+          cornerRadius={12}
         />
 
         {/* Court Boundary Line */}
@@ -52,15 +52,15 @@ export const BasketballCourt: React.FC<BasketballCourtProps> = ({ variant }) => 
           width={courtW}
           height={courtH}
           stroke="#475569"
-          strokeWidth={4}
+          strokeWidth={3}
           fill="#161922"
         />
 
         {/* Backboard */}
         <Line
-          points={[rimX - 60, courtTop + 35, rimX + 60, courtTop + 35]}
+          points={[rimX - 50, courtTop + 30, rimX + 50, courtTop + 30]}
           stroke="#94a3b8"
-          strokeWidth={6}
+          strokeWidth={5}
           lineCap="round"
         />
 
@@ -68,28 +68,28 @@ export const BasketballCourt: React.FC<BasketballCourtProps> = ({ variant }) => 
         <Circle
           x={rimX}
           y={rimY}
-          radius={18}
+          radius={16}
           stroke="#f97316"
-          strokeWidth={4}
+          strokeWidth={3.5}
         />
 
         {/* Rim connector */}
         <Line
-          points={[rimX, courtTop + 35, rimX, rimY - 18]}
+          points={[rimX, courtTop + 30, rimX, rimY - 16]}
           stroke="#94a3b8"
-          strokeWidth={4}
+          strokeWidth={3.5}
         />
 
         {/* Restricted Area Arc */}
         <Arc
           x={rimX}
           y={rimY}
-          innerRadius={75}
-          outerRadius={75}
+          innerRadius={65}
+          outerRadius={65}
           angle={180}
           rotation={0}
           stroke="#475569"
-          strokeWidth={3}
+          strokeWidth={2.5}
         />
 
         {/* Key / Paint (Trapezoid/Rectangle) */}
@@ -99,7 +99,7 @@ export const BasketballCourt: React.FC<BasketballCourtProps> = ({ variant }) => 
           width={keyW}
           height={keyH}
           stroke="#475569"
-          strokeWidth={3}
+          strokeWidth={2.5}
           fill="#1a202c"
         />
 
@@ -112,7 +112,7 @@ export const BasketballCourt: React.FC<BasketballCourtProps> = ({ variant }) => 
           angle={180}
           rotation={0}
           stroke="#475569"
-          strokeWidth={3}
+          strokeWidth={2.5}
         />
 
         {/* Free Throw Circle (Bottom Dashed inside the paint) */}
@@ -124,15 +124,15 @@ export const BasketballCourt: React.FC<BasketballCourtProps> = ({ variant }) => 
           angle={180}
           rotation={180}
           stroke="#475569"
-          strokeWidth={3}
-          dash={[12, 12]}
+          strokeWidth={2.5}
+          dash={[10, 10]}
         />
 
         {/* Continuous 3-Point Line (Seamless Corners + Arc) */}
         <Path
           data={halfCourt3PtPath}
           stroke="#475569"
-          strokeWidth={3}
+          strokeWidth={2.5}
           lineCap="round"
           lineJoin="round"
         />
@@ -141,28 +141,28 @@ export const BasketballCourt: React.FC<BasketballCourtProps> = ({ variant }) => 
         <Line
           points={[courtLeft, courtTop + courtH, courtLeft + courtW, courtTop + courtH]}
           stroke="#475569"
-          strokeWidth={4}
+          strokeWidth={3}
         />
 
         {/* Center Circle Arc at half court */}
         <Arc
           x={rimX}
           y={courtTop + courtH}
-          innerRadius={115}
-          outerRadius={115}
+          innerRadius={88}
+          outerRadius={88}
           angle={180}
           rotation={180}
           stroke="#475569"
-          strokeWidth={3}
+          strokeWidth={2.5}
         />
       </Group>
     );
   }
 
-  // Full Court
+  // Full Court (960 x 540)
   const W = FULL_COURT_BOUNDS.width;
   const H = FULL_COURT_BOUNDS.height;
-  const margin = 30;
+  const margin = 20;
   const courtW = W - margin * 2;
   const courtH = H - margin * 2;
   const courtLeft = margin;
@@ -171,15 +171,15 @@ export const BasketballCourt: React.FC<BasketballCourtProps> = ({ variant }) => 
   const midY = H / 2;
 
   // Left Basket
-  const leftRimX = courtLeft + 70;
+  const leftRimX = courtLeft + 65;
   const leftRimY = midY;
   // Right Basket
-  const rightRimX = courtLeft + courtW - 70;
+  const rightRimX = courtLeft + courtW - 65;
   const rightRimY = midY;
 
   // Full-court 3-point paths
-  const threePtRadiusFull = 260;
-  const cornerYDistFull = 190;
+  const threePtRadiusFull = 240;
+  const cornerYDistFull = 180;
   const xDeltaFull = Math.sqrt(threePtRadiusFull * threePtRadiusFull - cornerYDistFull * cornerYDistFull);
   const leftXIntersect = leftRimX + xDeltaFull;
   const left3PtPath = `M ${courtLeft} ${midY - cornerYDistFull} L ${leftXIntersect} ${midY - cornerYDistFull} A ${threePtRadiusFull} ${threePtRadiusFull} 0 0 1 ${leftXIntersect} ${midY + cornerYDistFull} L ${courtLeft} ${midY + cornerYDistFull}`;
@@ -196,7 +196,7 @@ export const BasketballCourt: React.FC<BasketballCourtProps> = ({ variant }) => 
         width={W}
         height={H}
         fill="#1e222d"
-        cornerRadius={16}
+        cornerRadius={12}
       />
 
       {/* Outer Court Boundary */}
@@ -206,7 +206,7 @@ export const BasketballCourt: React.FC<BasketballCourtProps> = ({ variant }) => 
         width={courtW}
         height={courtH}
         stroke="#475569"
-        strokeWidth={4}
+        strokeWidth={3}
         fill="#161922"
       />
 
@@ -214,24 +214,23 @@ export const BasketballCourt: React.FC<BasketballCourtProps> = ({ variant }) => 
       <Line
         points={[midX, courtTop, midX, courtTop + courtH]}
         stroke="#475569"
-        strokeWidth={3}
+        strokeWidth={2.5}
       />
 
       {/* Center Circle */}
       <Circle
         x={midX}
         y={midY}
-        radius={75}
+        radius={70}
         stroke="#475569"
-        strokeWidth={3}
+        strokeWidth={2.5}
       />
 
       {/* LEFT BASKET */}
-      {/* Backboard */}
       <Line
-        points={[courtLeft + 30, midY - 50, courtLeft + 30, midY + 50]}
+        points={[courtLeft + 25, midY - 45, courtLeft + 25, midY + 45]}
         stroke="#94a3b8"
-        strokeWidth={5}
+        strokeWidth={4.5}
       />
       <Circle
         x={leftRimX}
@@ -241,46 +240,45 @@ export const BasketballCourt: React.FC<BasketballCourtProps> = ({ variant }) => 
         strokeWidth={3}
       />
       <Line
-        points={[courtLeft + 30, midY, leftRimX - 14, midY]}
+        points={[courtLeft + 25, midY, leftRimX - 14, midY]}
         stroke="#94a3b8"
         strokeWidth={3}
       />
       {/* Left Key */}
       <Rect
         x={courtLeft}
-        y={midY - 100}
-        width={190}
-        height={200}
+        y={midY - 90}
+        width={180}
+        height={180}
         stroke="#475569"
-        strokeWidth={3}
+        strokeWidth={2.5}
         fill="#1a202c"
       />
       {/* Left FT Circle */}
       <Arc
-        x={courtLeft + 190}
+        x={courtLeft + 180}
         y={midY}
-        innerRadius={70}
-        outerRadius={70}
+        innerRadius={65}
+        outerRadius={65}
         angle={180}
         rotation={270}
         stroke="#475569"
-        strokeWidth={3}
+        strokeWidth={2.5}
       />
       {/* Left 3PT Line (Continuous Path) */}
       <Path
         data={left3PtPath}
         stroke="#475569"
-        strokeWidth={3}
+        strokeWidth={2.5}
         lineCap="round"
         lineJoin="round"
       />
 
       {/* RIGHT BASKET */}
-      {/* Backboard */}
       <Line
-        points={[courtLeft + courtW - 30, midY - 50, courtLeft + courtW - 30, midY + 50]}
+        points={[courtLeft + courtW - 25, midY - 45, courtLeft + courtW - 25, midY + 45]}
         stroke="#94a3b8"
-        strokeWidth={5}
+        strokeWidth={4.5}
       />
       <Circle
         x={rightRimX}
@@ -290,36 +288,36 @@ export const BasketballCourt: React.FC<BasketballCourtProps> = ({ variant }) => 
         strokeWidth={3}
       />
       <Line
-        points={[courtLeft + courtW - 30, midY, rightRimX + 14, midY]}
+        points={[courtLeft + courtW - 25, midY, rightRimX + 14, midY]}
         stroke="#94a3b8"
         strokeWidth={3}
       />
       {/* Right Key */}
       <Rect
-        x={courtLeft + courtW - 190}
-        y={midY - 100}
-        width={190}
-        height={200}
+        x={courtLeft + courtW - 180}
+        y={midY - 90}
+        width={180}
+        height={180}
         stroke="#475569"
-        strokeWidth={3}
+        strokeWidth={2.5}
         fill="#1a202c"
       />
       {/* Right FT Circle */}
       <Arc
-        x={courtLeft + courtW - 190}
+        x={courtLeft + courtW - 180}
         y={midY}
-        innerRadius={70}
-        outerRadius={70}
+        innerRadius={65}
+        outerRadius={65}
         angle={180}
         rotation={90}
         stroke="#475569"
-        strokeWidth={3}
+        strokeWidth={2.5}
       />
       {/* Right 3PT Line (Continuous Path) */}
       <Path
         data={right3PtPath}
         stroke="#475569"
-        strokeWidth={3}
+        strokeWidth={2.5}
         lineCap="round"
         lineJoin="round"
       />
